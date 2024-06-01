@@ -1,15 +1,14 @@
 getEmployee();
 async function getEmployee(){
     document.getElementById("pagination-number").innerHTML = "";
-    const employee = await fetchEmployee();
-    console.log(employee[0].id+"    "+employee[0].avatar);
+    const employee =  await fetchEmployee();
     let limit = document.getElementById("limit-of-employee").value;
     let row = "";
     document.getElementById("total").innerHTML = `of ${employee.length}`;
     document.getElementById("total").value = employee.length;
     for(let i=0;i<limit;i++){
     if(employee[i]){
-        row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" id="picture" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
+        row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" id="picture" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p style="color: #2B3674;">${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
         "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
         "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
         <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,7 +62,7 @@ async function getLimitEmployee(employee,start,end){
     document.getElementById("total").value = employee.length;
     for(let i=start;i<end;i++){
         if(employee[i]){
-            row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" src="./public/avatars/${employee[i].id}.jpg" alt=""` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
+            row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
             "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
             "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
             <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -510,7 +509,7 @@ async function editEmployee(employee,id){
         addAvatar(id,avatar);
         let timer = setTimeout(()=>{
             location.reload();
-        },1000);
+        },800);
         timer();
     }else{
         view();

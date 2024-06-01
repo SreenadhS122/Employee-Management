@@ -66,12 +66,12 @@ ul{
 .fw-3{
     font-weight: 300 !important;
 }
-thead{
-    color: #8B95B7;
+th{
+    color: #8B95B7 !important;
     font-size: 14px;
     font-weight: 500;
 }
-tbody{
+td{
     color: #2B3674 !important;
     font-size: 14px;
     font-weight: 700;
@@ -258,7 +258,7 @@ input[type="file"]{
     position: absolute;
     display: none;
 }
-.view-user{
+.viewed-user{
     width: 60%;
     background-color: white;
 }
@@ -287,17 +287,17 @@ input[type="file"]{
 .col-lg-6{
     width: 48% !important;
 }
-.view-user h4{
+.viewed-user h4{
     font-size: 20px;
     font-weight: 700;
     color: #2B3674;
 }
-.view-user h5{
+.viewed-user h5{
     font-size: 16px;
     color: #2B3674;
     font-weight: 500;
 }
-.view-user h6,p{
+.viewed-user h6,p{
     font-size: 14px;
     color: #707EAE;
 }
