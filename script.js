@@ -1,14 +1,15 @@
 getEmployee();
 async function getEmployee(){
-    document.getElementById("employee-table").innerHTML="";
+    document.getElementById("pagination-number").innerHTML = "";
     const employee = await fetchEmployee();
+    console.log(employee[0].id+"    "+employee[0].avatar);
     let limit = document.getElementById("limit-of-employee").value;
     let row = "";
     document.getElementById("total").innerHTML = `of ${employee.length}`;
     document.getElementById("total").value = employee.length;
     for(let i=0;i<limit;i++){
     if(employee[i]){
-        row = "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" src="./public/avatars/${employee[i].id}.jpg" alt=""` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
+        row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" id="picture" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
         "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
         "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
         <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -48,22 +49,21 @@ async function getEmployee(){
           </li>
         </ul>
       </div>` + "<tr>";
-        $(row).appendTo(".table tbody");
     }else{
         break;
     } 
     }
+    document.getElementById("employee-table").innerHTML = row;
     pagination(employee);
 }
 async function getLimitEmployee(employee,start,end){
-    document.getElementById("employee-table").innerHTML="";
     document.getElementById("pagination-number").innerHTML = "";
     let row = "";
     document.getElementById("total").innerHTML = `of ${employee.length}`;
     document.getElementById("total").value = employee.length;
     for(let i=start;i<end;i++){
         if(employee[i]){
-            row = "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" src="./public/avatars/${employee[i].id}.jpg" alt=""` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
+            row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" src="./public/avatars/${employee[i].id}.jpg" alt=""` +`<p>${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
             "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
             "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
             <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -103,9 +103,9 @@ async function getLimitEmployee(employee,start,end){
               </li>
             </ul>
           </div>` + "<tr>";
-            $(row).appendTo(".table tbody");   
         }
     }
+    document.getElementById("employee-table").innerHTML = row;
     pagination(employee)
 }
 async function fetchEmployee(){
@@ -113,7 +113,6 @@ async function fetchEmployee(){
     const employee = await employeeList.json();
     return employee;
 }
-
 document.getElementById("avatar").addEventListener("change",imageValidation);
 document.getElementById("salutation").addEventListener("change",salutationValidation);
 document.getElementById("firstname").addEventListener("change",firstNameValidation);
@@ -140,11 +139,6 @@ document.getElementById("password").addEventListener("keyup",passwordValidation)
 document.getElementById("editimg").addEventListener("change",editImageChange);
 document.getElementById("limit-of-employee").addEventListener("change",limitEmployee);
 document.getElementById("search").addEventListener("keyup",searchEmployee);
-async function fetchEmployee(){
-    const employeeList = await fetch("http://localhost:8080/employees");
-    const employee = await employeeList.json();
-    return employee;
-}
 function imageValidation(){
     let avatar = document.getElementById("avatar").value?document.getElementById("avatar").files[0]:"";
     document.getElementById("avatarPreview").style = "display:block";
@@ -312,6 +306,7 @@ function passwordValidation(){
 async function validate(id){
     let errors = [];
     let employee = {};
+    let avatarFlag;
     let avatar = document.getElementById("avatar").value?document.getElementById("avatar").files[0]:"";
     employee.salutation = document.getElementById("salutation").value;
     employee.firstName = document.getElementById("firstname").value;
@@ -331,12 +326,12 @@ async function validate(id){
     const passwordRegex = /^\d{6}$/;
     const phoneRegex = /^\d{10}$/;
     const textRegex =  /^[A-Za-z]+$/;
-    if(!avatar &&  !employee.avatar){
+    if(!avatar &&  !avatarFlag){
         document.getElementById("avatarVal").style = "color:red";
         document.getElementById("avatarVal").innerHTML = "Image is required";
     }else{
         console.log(avatar);
-        employee.avatar = true;
+        avatarFlag = true;
         document.getElementById("avatarPreview").style = "display:block";
         document.getElementById("preview").src = URL.createObjectURL(document.getElementById("avatar").files[0]);
         document.getElementById("avatarVal").style = "color:green";
@@ -470,7 +465,7 @@ async function validate(id){
         document.getElementById("passwordVal").style = "color:green";
         document.getElementById("passwordVal").innerHTML = "Good";
     }
-    if(errors.length == 0 && employee.avatar == true && !id){
+    if(errors.length == 0 && avatarFlag == true && !id){
         sweetAlert("Employee added successfully");
         addEmployee(employee,avatar);
     }else if(id && errors.length == 0){
@@ -513,10 +508,14 @@ async function editEmployee(employee,id){
     const avatar = editImageChange();
     if(avatar){
         addAvatar(id,avatar);
+        let timer = setTimeout(()=>{
+            location.reload();
+        },1000);
+        timer();
     }else{
         view();
-        getEmployee();   
-    }
+        getEmployee();
+    }  
         addEmployeePopupClose();
 }
 function addEmployeePopup(){
@@ -528,6 +527,7 @@ function addEmployeePopup(){
     document.getElementById("empid").value = "";
     document.getElementById("addemployee-popup").style = "display:flex;flex-direction:column";
     document.getElementById("delete").style = "display:none";
+    document.getElementById("main").style = "position:fixed;";
 }
 function addEmployeePopupClose(){
     document.getElementById("passwordVal").innerHTML = "";
@@ -562,6 +562,7 @@ function addEmployeePopupClose(){
     document.getElementById("preview").src = "";
     document.getElementById("avatarPreview").style = "display:none";
     document.getElementById("addemployeePopup").style = "display:none";
+    document.getElementById("main").style = "position:relative;";
 }
 function viewActions(){
     document.getElementById("view-actions").style = "display:flex";
@@ -575,6 +576,7 @@ function editEmployeePopup(id){
     document.getElementById("empid").value = id;
     document.getElementById("delete").style = "display:none";
     document.getElementById("addemployee-popup").style = "display:flex;flex-direction:column";
+    document.getElementById("main").style = "position:fixed;";
     editForm(id);
 }
 async function editForm(id){
@@ -614,6 +616,7 @@ function deleteEmployeePopup(id){
     document.getElementById("delete").style = "display:flex";
     document.getElementById("addemployee-popup").style = "display:none";
     document.getElementById("deleteId").value = id;
+    document.getElementById("main").style = "position:fixed;";
 }
 async function deleteEmployee(id,inView){
     const deleteResponse = await fetch("http://localhost:8080/employees/"+id,{
@@ -625,7 +628,7 @@ async function deleteEmployee(id,inView){
         sweetAlert("Employee deleted successfully");
         let timer = setTimeout(()=>{
             window.location.href="index.html";
-        },3000);
+        },2000);
         timer();
       }else{
         sweetAlert("Employee deleted successfully");
@@ -650,11 +653,6 @@ async function view(){
         document.getElementById("view-username").innerHTML = employee.username;
         document.getElementById("view-empid").value = employee.id;
     }
-}
-async function limitEmployee(){
-    const size = document.getElementById("limit-of-employee").value;
-    const employee = await fetchEmployee();
-    getLimitEmployee(employee,0,size);
 }
 function pagination(employee){
     let factor = parseInt(document.getElementById("limit-of-employee").value);
@@ -709,6 +707,16 @@ async function searchEmployee(){
         return [];
     }
    
+}
+async function limitEmployee(){
+    const size = document.getElementById("limit-of-employee").value;
+    const employee = await fetchEmployee();
+    const search = await searchEmployee();
+    if(search.length != 0){
+        getLimitEmployee(search,0,size);
+    }else{
+        getLimitEmployee(employee,0,size);
+    }
 }
 function sweetAlert(mes){
     Swal.fire({
