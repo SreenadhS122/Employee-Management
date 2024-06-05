@@ -12,6 +12,7 @@
   </head>
 <body>
  <div class="main" id="main">
+  <hr class="seperator">
       <div class="addemployee-popup-container p-4" id="addemployeePopup">
       <div class="addemployee-popup bg-body px-4 py-4" id="addemployee-popup">
         <div class="d-flex justify-content-between">
@@ -29,7 +30,7 @@
             <input type="file" style="display: none;" id="editimg">
             <label class="change-btn mx-1" style="display: flex; align-items: center; justify-content: center;text-align: center;" for="editimg">Change</label>
           </div>
-             <div class="justify-content-center flex-column align-items-center img-upload p-4" id="addemployee-upload">
+             <label class="justify-content-center flex-column align-items-center img-upload p-4" id="addemployee-upload">
                  <label for="avatar" style="cursor: pointer;;"> 
                  <span class="material-symbols-outlined">
                      upload_2
@@ -42,7 +43,7 @@
                    <img id="preview" src="" alt="" style="object-fit: cover;height: 200px;width: 200px; border-radius: 50%;border: 2px solid green;">
                   </div>
                   <p id="avatarVal"></p>
-             </div>
+                </label>
              <div class="row pt-3">
                  <div class="w-md-100 col-xl-2 col-lg-2 col-md-12 pt-2">
                      <label for="inputState" class="form-label">Salutation</label>
@@ -154,9 +155,9 @@
          </div>
          </div>
        </form>
-        <div class="d-flex justify-content-end">
-       <button type="button" class="btn btn-secondary" onclick="addEmployeePopupClose()">Close</button>
-       <button type="button" class="btn btn-primary mx-1" onclick="validate(document.getElementById('empid').value)" id="button-dia"></button>
+        <div class="d-flex justify-content-end align-items-center pt-3">
+       <button type="button" class="btn close-button p-2" onclick="addEmployeePopupClose()">Close</button>
+       <button type="button" class="btn success-btn mx-1 p-2" onclick="validate(document.getElementById('empid').value)" id="button-dia"></button>
        <input type="text" style="display: none;" name="" id="empid">
      </div>
   </div>   
@@ -171,10 +172,10 @@
      <p>Are you sure you want to delete this employee?</p>
      <div class="d-flex justify-content justify-content-end">
       <input type="text" style="display: none;" name="" id="deleteId" value="">
-      <button class="btn btn-light" onclick="addEmployeePopupClose()">
+      <button class="btn close-button" onclick="addEmployeePopupClose()">
         Cancel
       </button>
-      <button class="btn btn-danger" style="color: white;" onclick="deleteEmployee(document.getElementById('deleteId').value,false)">
+      <button class="btn danger-btn" style="color: white;" onclick="deleteEmployee(document.getElementById('deleteId').value,false)">
         Delete
       </button>
      </div>
@@ -192,17 +193,29 @@
       </h3>
       <hr class="mt-4">
       <ul class="sidebar-items pt-3">
-          <li>
-              Dashboard
+          <li class="d-flex align-items-center gap-1" >
+            <span class="material-symbols-outlined" style="color: white;">
+              home
+              </span>
+              <h6 style="margin: 0;">Dashboard</h6>
           </li>
-          <li>
-              Employees
+          <li class="d-flex align-items-center gap-1" >
+            <span class="material-symbols-outlined" style="color: white;">
+              bar_chart_4_bars
+              </span>
+              <h6 style="margin: 0;">Employees</h6>
           </li>
-          <li>
-              My profile
+          <li class="d-flex align-items-center gap-1" >
+            <span class="material-symbols-outlined" style="color: white;">
+              person
+              </span>
+              <h6 style="margin: 0;">My Profile</h6>
           </li>
-          <li>
-              Logout
+          <li class="d-flex align-items-center gap-1" >
+            <span class="material-symbols-outlined" style="color: white;">
+              lock_open
+              </span>
+              <h6 style="margin: 0;">Logout</h6>
           </li>
       </ul>
       </div>
@@ -213,29 +226,29 @@
         </div>
     </div>
     <div class="main-menu w-100">
-        <div class="d-flex justify-content-between p-5">
+      <div>
+        <div class="d-flex justify-content-between p-5 align-items-center">
       <div>
         <h6 class="txt-light">
             Dashboard/Employees
         </h6>
-        <h1 class="txt-dark">
-            Employee Details
+        <h1 class="employee-heading">
+            Employees
         </h1>
       </div>
-      <div class="search-bar p-3  ">
-        <input type="search" placeholder="Search" class="p-3" id="search">
+      <div class="search-bar p-2">
+        <input type="search" placeholder="Search" class="px-3 py-1 py-2" id="search">
+        <span class="material-symbols-outlined">
+          notifications
+          </span>
+          <img src="./images/Elipse 5.png" alt="">
       </div>
       </div>
       <div class="mx-5 users-table">
         <div class="p-3 d-flex justify-content-between">
             <div class="d-flex gap-3 align-items-center">
                 <h4 class="txt-dark">Employee List</h4>
-                <select name="" id="limit-of-employee" class="number-of-employee px-1">
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                </select>
+                <input type="number" id="limit-of-employee" class="number-of-employee px-1" value="3">
                 <span id="total"></span>
             </div>
             <button class="btn btn-clr clr-white text-small fw-7 p-3 btn-round" onclick="addEmployeePopup()">Add Employee</button>
@@ -276,7 +289,21 @@
             </a>
           </li>
         </ul>
-      </nav >
+      </nav>
+      </div>
+      <div class="d-flex justify-content-between align-items-center px-3">
+        <p>
+          © 2023 All Rights Reserved. Stackup
+        </p>
+        <div class="d-flex">
+          <p>
+            Terms of Use
+          </p>
+          <p class="px-1">
+            Privacy Policy
+          </p>
+        </div>
+      </div>
     </div>
     </div>
    </div>

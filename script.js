@@ -1,62 +1,63 @@
 getEmployee();
 async function getEmployee(){
-    document.getElementById("pagination-number").innerHTML = "";
-    const employee =  await fetchEmployee();
-    let limit = document.getElementById("limit-of-employee").value;
-    let row = "";
-    document.getElementById("total").innerHTML = `of ${employee.length}`;
-    document.getElementById("total").value = employee.length;
-    for(let i=0;i<limit;i++){
-    if(employee[i]){
-        row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" id="picture" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p style="color: #2B3674;">${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
-        "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
-        "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
-        <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="material-symbols-outlined">
-        more_horiz
-        </span>
-        </button>
-        <ul class="dropdown-menu p-2">
-          <li><a class="detail-items" href="view.html" onclick="location.href=this.href+'?id='+'${employee[i].id}';return false;">
-          <span class="material-symbols-outlined">
-          visibility
-          </span>
-          <p>
-          View Details
-          </p>
-          </a>
-          </li>
-          <li>
-          <a class="detail-items" href="#" onclick="editEmployeePopup('${employee[i].id}')">
-          <span class="material-symbols-outlined">
-             edit
-         </span>
-         <p>
-          Edit
-          </p>
-          </a>
-          </li>
-          <li>
-          <a class="detail-items" href="#" onclick="deleteEmployeePopup('${employee[i].id}')">
-          <span class="material-symbols-outlined">
-            delete
+        const employee =  (await fetchEmployee()).reverse();
+        console.log(employee);
+        let limit = document.getElementById("limit-of-employee").value;
+        let row = "";
+        document.getElementById("total").innerHTML = `of ${employee.length}`;
+        document.getElementById("total").value = employee.length;
+        for(let i=0;i<limit;i++){
+        if(employee[i]){
+            row += "<tr class='tableitems'><th>#"+`${i+1}`+"</th><td class='img-nd-name'>" + `<img class="employee-img" id="picture" src="./public/avatars/${employee[i].id}.jpg" alt="">` +`<p style="color: #2B3674;">${employee[i].salutation}. ${employee[i].firstName} ${employee[i].lastName}</p>`+ "</td><td>" +employee[i].email+ 
+            "</td><td>" +employee[i].phone+ "</td><td>" +employee[i].gender+ "</td><td>" +employee[i].dob+ 
+            "</td><td>" +employee[i].country+ "</td>" + `<td>   <div class="dropdown">
+            <button class="actions-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="material-symbols-outlined">
+            more_horiz
             </span>
-            <p>
-          Delete
-          </p>
-          </a>
-          </li>
-        </ul>
-      </div>` + "<tr>";
-    }else{
-        break;
-    } 
-    }
-    document.getElementById("employee-table").innerHTML = row;
-    pagination(employee);
+            </button>
+            <ul class="dropdown-menu p-2">
+              <li><a class="detail-items" href="view.html" onclick="location.href=this.href+'?id='+'${employee[i].id}';return false;">
+              <span class="material-symbols-outlined">
+              visibility
+              </span>
+              <p>
+              View Details
+              </p>
+              </a>
+              </li>
+              <li>
+              <a class="detail-items" href="#" onclick="editEmployeePopup('${employee[i].id}')">
+              <span class="material-symbols-outlined">
+                 edit
+             </span>
+             <p>
+              Edit
+              </p>
+              </a>
+              </li>
+              <li>
+              <a class="detail-items" href="#" onclick="deleteEmployeePopup('${employee[i].id}')">
+              <span class="material-symbols-outlined">
+                delete
+                </span>
+                <p>
+              Delete
+              </p>
+              </a>
+              </li>
+            </ul>
+          </div>` + "<tr>";
+        }else{
+            break;
+        } 
+        }
+        document.getElementById("employee-table").innerHTML = row;
+        pagination(employee);
+        document.getElementById("page-1")?document.getElementById("page-1").style="background-color:blue !important;color:white !important;":"";
 }
-async function getLimitEmployee(employee,start,end){
-    document.getElementById("pagination-number").innerHTML = "";
+async function getLimitEmployee(employees,start,end){
+    const employee = employees.reverse();
     let row = "";
     document.getElementById("total").innerHTML = `of ${employee.length}`;
     document.getElementById("total").value = employee.length;
@@ -105,12 +106,20 @@ async function getLimitEmployee(employee,start,end){
         }
     }
     document.getElementById("employee-table").innerHTML = row;
-    pagination(employee)
+    pagination(employee);
 }
 async function fetchEmployee(){
-    const employeeList = await fetch("http://localhost:8080/employees");
-    const employee = await employeeList.json();
-    return employee;
+    try{
+        const employeeList = await fetch("http://localhost:8080/employees");
+        const employee = await employeeList.json();
+        return employee;
+    }catch(err){
+        Swal.fire({
+            title: "500",
+            text: "Server is down",
+            icon: "error"
+          });
+    }
 }
 document.getElementById("avatar").addEventListener("change",imageValidation);
 document.getElementById("salutation").addEventListener("change",salutationValidation);
@@ -137,7 +146,8 @@ document.getElementById("username").addEventListener("keyup",usernameValidation)
 document.getElementById("password").addEventListener("keyup",passwordValidation);
 document.getElementById("editimg").addEventListener("change",editImageChange);
 document.getElementById("limit-of-employee").addEventListener("change",limitEmployee);
-document.getElementById("search").addEventListener("keyup",searchEmployee);
+document.getElementById("search").addEventListener("input",searchEmployee);
+
 function imageValidation(){
     let avatar = document.getElementById("avatar").value?document.getElementById("avatar").files[0]:"";
     document.getElementById("avatarPreview").style = "display:block";
@@ -303,6 +313,17 @@ function passwordValidation(){
     }
 }
 async function validate(id){
+    try{
+        fetchEmployee().then(() => {
+            
+        });
+    }catch(err){
+        Swal.fire({
+            title: "Server Error",
+            text: "Server is down.",
+            icon: "error"
+          });
+    }
     let errors = [];
     let employee = {};
     let avatarFlag;
@@ -465,25 +486,26 @@ async function validate(id){
         document.getElementById("passwordVal").innerHTML = "Good";
     }
     if(errors.length == 0 && avatarFlag == true && !id){
-        sweetAlert("Employee added successfully");
         addEmployee(employee,avatar);
     }else if(id && errors.length == 0){
-        sweetAlert("Employee edited successfully");
         editEmployee(employee,id);
     } 
 }
 async function addEmployee(employee,avatar){
         const response = await fetch("http://localhost:8080/employees",{
-        method : "post",
-        headers: {
-            "Content-Type": "application/json",
-            },
-        body : JSON.stringify(employee)
-    });
-    const responseId = await response.json();
-    getEmployee();
+            method : "post",
+            headers: {
+                "Content-Type": "application/json",
+                },
+            body : JSON.stringify(employee)
+        });
+        const responseId = await response.json();
+    
     addEmployeePopupClose();
     addAvatar(responseId.id,avatar);
+    getEmployee();
+    sweetAlert("Employee added successfully");
+
 }
 async function addAvatar(id,avatar){
     const formData = new FormData();
@@ -497,13 +519,14 @@ async function addAvatar(id,avatar){
     addEmployeePopupClose();
 }
 async function editEmployee(employee,id){
-    await fetch(`http://localhost:8080/employees/${id}`,{
-        method : "put",
-        headers: {
-            "Content-Type": "application/json",
-            },
-        body : JSON.stringify(employee)
-    });
+        await fetch(`http://localhost:8080/employees/${id}`,{
+            method : "put",
+            headers: {
+                "Content-Type": "application/json",
+                },
+            body : JSON.stringify(employee)
+        });
+    
     const avatar = editImageChange();
     if(avatar){
         addAvatar(id,avatar);
@@ -516,6 +539,7 @@ async function editEmployee(employee,id){
         getEmployee();
     }  
         addEmployeePopupClose();
+        sweetAlert("Employee edited successfully");
 }
 function addEmployeePopup(){
     document.getElementById("addemployeePopup").style = "display:flex;background-color:rgba(5, 3, 16, 0.8)";
@@ -598,7 +622,11 @@ async function editForm(id){
     document.getElementById("username").value = currentEmployee.username;
     document.getElementById("password").value = currentEmployee.password;
     }catch(err){
-        console.log("Error");
+        Swal.fire({
+            title: "Server Error",
+            text: "Failed to fetch data",
+            icon: "error"
+          });
     }
 }
 function editImageChange(){
@@ -666,18 +694,22 @@ function pagination(employee){
 async function pages(num){
     const size = document.getElementById("limit-of-employee").value;
     let val = document.getElementById("pagination-number").value;
+    document.getElementById(`page-${num}`).style = "";
     const employee = await fetchEmployee();
     const search = await searchEmployee();
-    console.log(search);
     let start;
     let end;
     if(num == 'start'){
+        document.getElementById(`page-end`).style = "background-color:white !important;color:black !important;";
         start = 0;
         end = size;
     }else if(num == 'end'){
+        document.getElementById(`page-start`).style = "background-color:white !important;color:black !important;";
         start = (val-1)*size;
         end = start-(-size);
     }else{
+        document.getElementById(`page-start`).style = "background-color:white !important;color:black !important;";
+        document.getElementById(`page-end`).style = "background-color:white !important;color:black !important;";
         start = (num-1)*size;
         end = start-(-size);
     }
@@ -701,7 +733,9 @@ async function searchEmployee(){
     pagination(searchedEmployees);
     if(!searchedEmployees.length == 0){
         return searchedEmployees;
-    } 
+    }else{
+        document.getElementById("employee-table").innerHTML = "<h2>No matches found</h2>";
+    }
     }else{
         return [];
     }
@@ -716,6 +750,9 @@ async function limitEmployee(){
     }else{
         getLimitEmployee(employee,0,size);
     }
+    document.getElementById(`page-start`).style = "background-color:white !important;color:black !important;";
+    document.getElementById(`page-end`).style = "background-color:white !important;color:black !important;";
+    document.getElementById(`page-1`).style = "background-color:blue !important;color:white !important;";
 }
 function sweetAlert(mes){
     Swal.fire({

@@ -8,12 +8,17 @@ ul{
 .side-bar{
     background: linear-gradient(149.96deg, #301F81 12.51%, #0F0441 89.53%);
     color: white;
+    align-items: start;
 }
 .side-bar ul{
     list-style-type:none;
+    padding: 0;
 }
 .main-menu{
     background-color: #F4F7FE;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .users-table{
     background-color: white;
@@ -28,12 +33,23 @@ ul{
     display: flex;
     align-items: center;
     border-radius: 30px;
+    box-shadow: 14px 17px 40px 4px #7090B014;
+    gap: 10px;
 }
 .search-bar input{
     background-color:#F4F7FE;
-    width: 214px;
     border-radius: 49px;
     border: 0px;
+    outline: none;
+}
+.search-bar img{
+    width: 41px;
+    height: 41px;
+    border-radius: 50%;
+}
+.search-bar span{
+    color: #707EAE;
+    fill:none;
 }
 .number-of-employee{
     border: 1px solid #DDDDDD;
@@ -122,8 +138,40 @@ td{
 input[type="file"]{
     display: none;
 }
-
-.addemployee-popup label::after{
+.addemployee-popup{
+    border-radius: 20px;
+}
+.addemployee-popup .form-label{
+    font-size:14px;
+    font-weight:500;
+    color:#2B3674;
+}
+.addemployee-popup input{
+    font-size: 14px !important;
+    font-weight: 700;
+    color: #2B3674 !important;
+}
+::placeholder{
+    font-size: 14px !important;
+    font-weight: 600;
+    color: #2B3674 !important;
+}
+option{
+    font-size: 14px !important;
+    font-weight: 600px !important;
+}
+input[type="radio"]:checked,input[type="checkbox"]:checked{
+    accent-color: red !important;
+    background-color: #4318FF !important;
+}
+input[type="text"],input[type="email"],input[type="color"],input[type="date"],select{
+    border-radius: 22px !important;
+}
+input:focus,select:focus,textarea:focus{
+    box-shadow: none !important;
+    border: 1px solid #4318FF !important;
+}
+.addemployee-popup .form-label::after{
     content: "*";
     color: red;
 }
@@ -309,7 +357,41 @@ input[type="file"]{
 }
 .main{
     width: 100%;
+    position: relative;
 }
 .table-items{
+    color: #2B3674 !important;
+}
+.employee-heading{
+    font-size: 34px;
+    font-weight: 700;
+    color: #2B3674;
+}
+.seperator{
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    border: 1px solid #0000002B;
+    opacity: 1;
+}
+.success-btn{
+    border-radius: 16px !important;
+    background-color: #4318FF !important;
+    color: white !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+.danger-btn{
+    border-radius: 16px !important;
+    background-color: #EB506C !important;
+    color: white !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+}
+.close-button{
+    border-radius: 16px !important;
+    background-color: #FAF9FF !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
     color: #2B3674 !important;
 }

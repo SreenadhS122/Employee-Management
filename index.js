@@ -130,8 +130,6 @@ app.post("/employees", (req, res) => {
   const employees = readEmployeeData();
   const newEmployee = req.body;
   const validationErrors = validateEmployeeData(newEmployee);
-  console.log(newEmployee);
-  console.log(validationErrors);
   if (validationErrors.length > 0) {
     res.status(400).json({ errors: validationErrors });
   } else {
